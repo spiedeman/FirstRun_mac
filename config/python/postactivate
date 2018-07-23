@@ -1,0 +1,14 @@
+#!/bin/bash
+# This hook is sourced after every virtualenv is activated.
+
+virname=${VIRTUAL_ENV##*/}
+
+function run() {
+    if [ ! -d "~/Library/Jupyter/kernels/$virname" ]; then
+        python ~/GitHub/FirstRun/config/jupyter-virtualenv-osx/jupyter-virtualenv-osx.py --user --name $virname
+        alias ipython="jupyter-console --kernel=$virname"
+    fi
+}
+
+pip list | grep jupyter > /dev/null && run
+

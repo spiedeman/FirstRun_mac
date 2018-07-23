@@ -1,0 +1,39 @@
+export CLICOLOR=1
+export LSCOLORS=gxfxcxdxbxegedabagacad
+#### ALIAS
+alias ssh2='ssh -X xuwutao@124.16.143.99'
+alias sfat='ssh -X xuwutao@159.226.161.107 -i ~/.ssh/xuwutao_id_rsa'
+alias svultr='ssh root@144.202.41.163'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias vim='vim --servername vim'
+alias ll='ls -hl'
+alias la='ls -A'
+alias l='ls -CF'
+alias lla='ls -hAl'
+
+#### BINGDINGS
+bind 'set completion-ignore-case on'
+bind 'set visible-stats on'
+
+#### FOR AUTOJUMP
+[[ -s /usr/local/Cellar/autojump/22.5.1/etc/autojump.sh ]] && . /usr/local/Cellar/autojump/22.5.1/etc/autojump.sh
+
+#### FOR POWERLINE
+export PATH=/Users/xuwutao/Library/Python/2.7/bin:$PATH
+powerline-daemon -q
+POWERLINE_BASH_CONTINUATION=1
+POWERLINE_BASH_SELECT=1
+source /Users/xuwutao/Library/Python/2.7/lib/python/site-packages/powerline/bindings/bash/powerline.sh
+
+#### FOR SSH
+export office=xuwutao@124.16.143.99:/home/xuwutao
+export xuwutao="-i ~/.ssh/xuwutao_id_rsa xuwutao@159.226.161.107:/public/home/xuwutao"
+
+#### FOR FZF
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+#### FOR PYTHON
+source /Users/xuwutao/Library/Python/2.7/bin/virtualenvwrapper.sh
+
+export PATH=/Users/xuwutao/Library/Python/2.7/bin:$PATH
