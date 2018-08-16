@@ -655,9 +655,7 @@
             endif
         endfunction
         nnoremap <c-p> :call MarkdownPreviewTrigger()<CR>
-        " nmap <silent> <c-p> <Plug>MarkdownPreview
-        " nmap <silent> <c-m> <Plug>StopMarkdownPreview
-        " imap <silent> <c-m> <Plug>StopMarkdownPreview
+        inoremap <c-p> :call MarkdownPreviewTrigger()<CR>
     endfunction 
     call SetMarkdownPreview()
 
