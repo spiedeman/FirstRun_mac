@@ -60,7 +60,7 @@
         " - name:	name of plugin
         " - status: 'installed', 'updated', or 'unchanged'
         " - force:  set on  PlugInstall! or PlugUpdate!
-        if a:info.status == 'installed' || a:info.force
+        if a:info.status ==? 'installed' || a:info.force
             !cd ~/.vim/vim_plugin/YouCompleteMe
             !./install.py --clang-completer --build-dir=$HOME/ycm_build
             !rm -rf ~/ycm_build
@@ -84,18 +84,18 @@
     " 设置中文帮助
     set helplang=cn
     " Multi-language 
-    if has("multi_byte")
+    if has('multi_byte')
         " UTF-8 encoding 
         set encoding=utf-8
         set termencoding=utf-8
         set formatoptions+=nM
-        set fencs=utf-8,gbk
+        set fileencodings=utf-8,gbk
         
         if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
             set ambiwidth=double
         endif 
     else 
-        echoerr "Sorry, this version of (g)vim was not compiled with +multi_byte"
+        echoerr 'Sorry, this version of (g)vim was not compiled with +multi_byte'
     endif 
     " Doc directory 
     let helptags=$HOME.'/.vim/doc'
@@ -178,12 +178,12 @@
         function! MyColorScheme(name, bg)
             execute 'set background='.a:bg
             execute 'colorscheme '.a:name
-            if a:name == 'solarized'
+            if a:name ==? 'solarized'
                 let g:solarized_underline = 0
                 let g:solarized_contrast = 'low'
                 let g:solarized_contrast = 'normal'
                 let g:solarized_contrast = 'high'
-                if &background == "dark"
+                if &background ==? 'dark'
                     hi CursorLine   cterm=NONE ctermbg=black     ctermfg=none
                     hi CursorColumn cterm=NONE ctermbg=black     ctermfg=none
                     hi Pmenu        cterm=NONE ctermbg=darkblue  ctermfg=234
@@ -202,8 +202,8 @@
                     hi StatusLineNC cterm=none ctermbg=grey
                     hi SignColumn   cterm=NONE ctermbg=lightgrey ctermfg=none gui=NONE guifg=NONE  guibg=#eee8d5
                 endif
-            elseif a:name == 'dracula'
-                if &background == "dark"
+            elseif a:name ==? 'dracula'
+                if &background ==? 'dark'
                     hi Pmenu cterm=NONE ctermbg=blue ctermfg=234
                     hi PmenuSel     cterm=BOLD ctermbg=darkgreen ctermfg=234
                 else
@@ -213,7 +213,7 @@
             endif
         endfunction
 
-        if has("gui_running")
+        if has('gui_running')
             " set background=dark "实际上light才会给出正确的solarized配色
             call MyColorScheme('solarized', 'dark')
             call MyColorScheme('solarized', 'light')
@@ -221,7 +221,7 @@
             set guicursor=a:block-blinkon0
             set guifont=Hack:h14
             set guioptions=t
-        elseif $FROM_SSH == 'TRUE'
+        elseif $FROM_SSH ==? 'TRUE'
             call MyColorScheme('Monokai', 'light')
         else 
             " call MyColorScheme('dracula', 'light')
@@ -253,10 +253,12 @@
         inoremap <C-b>n <Esc>:bnext<CR><insert>
         inoremap <C-b>p <Esc>:bprevious<CR>
         "再次打开时回到最后一次进行修改的地方
-        autocmd BufReadPost *
-            \ if line("'\"") > 0 && line("'\"") <= line("$") |
-            \   exe "normal! g'\"" |
-            \ endif
+        augroup return_where_leave
+            autocmd BufReadPost *
+                \ if line("'\"") > 0 && line("'\"") <= line("$") |
+                \   exe "normal! g'\"" |
+                \ endif
+        augroup END
         "记住缓冲区关闭时的信息
         set viminfo^=%
     endfunction
@@ -305,8 +307,8 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Fortran
     function! SetFortran()
-        let s:extfname=expand("%:e")
-        if s:extfname==?"f90"
+        let s:extfname=expand('%:e')
+        if s:extfname==?'f90'
             let fortran_free_source=1
             unlet! fortran_fixed_source
         else
@@ -333,7 +335,7 @@
     function! SetLatex()
         let g:tex_flavor = 'latex' 
         let g:tex_conceal= 0
-        let g:tex_fast = "bcmMPrsSvV"
+        let g:tex_fast = 'bcmMPrsSvV'
     endfunction
     call SetLatex()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -429,10 +431,10 @@
     function! SetUltiSnips()
         let g:UltiSnipsSnippetDirectories=['UltiSnips']
         let g:UltiSnipsSnippetsDir='~/.vim/UltiSnips'
-        let g:UltiSnipsExpandTrigger="<c-j>"
-        let g:UltiSnipsJumpForwardTrigger="<c-j>"
-        let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-        let g:UltiSnipsEditSplit="vertical"
+        let g:UltiSnipsExpandTrigger='<c-j>'
+        let g:UltiSnipsJumpForwardTrigger='<c-j>'
+        let g:UltiSnipsJumpBackwardTrigger='<c-k>'
+        let g:UltiSnipsEditSplit='vertical'
             " " make YCM compatible with UltiSnips
             " function! g:UltiSnips_Complete()
             "     call UltiSnips#ExpandSnippet()
@@ -571,10 +573,10 @@
         function! VimtexTrigger()
             if g:vimtex_enabled == 0
                 let g:vimtex_enabled = 1
-                echom "vimtex turns on"
+                echom 'vimtex turns on'
             else
                 let g:vimtex_enabled = 0
-                echom "vimtex turns off"
+                echom 'vimtex turns off'
             endif
         endfunction
         nnoremap <leader>v :call VimtexTrigger()<CR>
@@ -828,20 +830,20 @@
         nmap <F5> :call <SID>compile_and_run()<CR>
         function! s:compile_and_run()
             exec 'w'
-            if &filetype == 'fortran'
-                exec "AsyncRun! mpifort % -o %< -qopenmp -fpp -mkl; time ./%<"
-            elseif &filetype == 'c'
-                exec "AsyncRun! gcc % -o %<; time ./%<"
-            elseif &filetype == 'cpp'
-                exec "AsyncRun! g++ -std=c++11 % -o %<; time ./%<"
-            elseif &filetype == 'java'
-                exec "AsyncRun! javac %; time java /%<"
-            elseif &filetype == 'sh'
-                exec "AsyncRun! time bash %"
-            elseif &filetype == 'python'
-                exec "AsyncRun! python %"
-            elseif &filetype == 'tex'
-                exec "VimtexCompile"
+            if &filetype ==? 'fortran'
+                exec 'AsyncRun! mpifort % -o %< -qopenmp -fpp -mkl; time ./%<'
+            elseif &filetype ==? 'c'
+                exec 'AsyncRun! gcc % -o %<; time ./%<'
+            elseif &filetype ==? 'cpp'
+                exec 'AsyncRun! g++ -std=c++11 % -o %<; time ./%<'
+            elseif &filetype ==? 'java'
+                exec 'AsyncRun! javac %; time java /%<'
+            elseif &filetype ==? 'sh'
+                exec 'AsyncRun! time bash %'
+            elseif &filetype ==? 'python'
+                exec 'AsyncRun! python %'
+            elseif &filetype ==? 'tex'
+                exec 'VimtexCompile'
             endif
         endfunction 
         " bind <F9> to open quickfix window rapidly.
@@ -867,7 +869,7 @@
 
 " Powerline
     function! SetPowerline()
-        if has("python")
+        if has('python')
             python from powerline.vim import setup as powerline_setup
             python powerline_setup()
             python del powerline_setup
