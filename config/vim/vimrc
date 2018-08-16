@@ -16,37 +16,43 @@
     " Make sure using single quotes
     " Shorthand notation for full URL.
     Plug 'icymind/NeoSolarized'
-    Plug 'dracula/vim',{'as':'dracula'}     "`as` will install the plugin in
-                                            "a directory called 'dracula' instead
-                                            "of 'vim'
+    " Plug 'dracula/vim',{'as':'dracula'}     " `as` will install the plugin in
+                                            " a directory called 'dracula' instead
+                                            " of 'vim'
+    Plug 'ashfinal/vim-colors-violet'       "
     Plug 'altercation/vim-colors-solarized'
-    Plug 'flazz/vim-colorschemes'           "主题合集
-    Plug 'yianwillis/vimcdoc'               "中文帮助文档
-    Plug 'scrooloose/nerdtree'				"文件树浏览
-    Plug 'majutsushi/tagbar'                "文件结构
-    Plug 'tpope/vim-fugitive'               "管理 Git 仓库
+    " Plug 'flazz/vim-colorschemes'            "主题合集
+    Plug 'yianwillis/vimcdoc'                  " 中文帮助文档
+    Plug 'scrooloose/nerdtree'                 " 文件树浏览
+    Plug 'majutsushi/tagbar'                   " 文件结构
+    Plug 'tpope/vim-fugitive'                  " 管理 Git 仓库
 
-    Plug 'SirVer/ultisnips'					"代码块补全
-    Plug 'honza/vim-snippets'				"配合 ultisnips
-    Plug 'w0rp/ale'							"异步语法检查
-    Plug 'chiel92/vim-autoformat'			"自动格式化代码
+    Plug 'SirVer/ultisnips'                    " 代码块补全
+    Plug 'honza/vim-snippets'                  " 配合 ultisnips
+    Plug 'w0rp/ale'                            " 异步语法检查
+    Plug 'chiel92/vim-autoformat'              " 自动格式化代码
+    Plug 'hotoo/pangu.vim'                     " 自动格式化、标准化中文排版
 
-    Plug 'scrooloose/nerdcommenter'			"批量、快速注释
-    Plug 'easymotion/vim-easymotion'		"快速查找定位
-    " Plug 'kien/ctrlp.vim'					"强大的文件搜索
-    " Plug 'tacahiroy/ctrlp-funky'			"配合 ctrlp
-    Plug 'Yggdroot/indentLine'				"自动显示缩进线
+    Plug 'scrooloose/nerdcommenter'            " 批量、快速注释
+    Plug 'easymotion/vim-easymotion'           " 快速查找定位
+    Plug 'haya14busa/incsearch.vim'            " 增量搜索
+    Plug 'haya14busa/incsearch-fuzzy.vim'      " 模糊增量搜索
+    Plug 'haya14busa/incsearch-easymotion.vim' " 增量搜索与 easymotion 结合
+    " Plug 'kien/ctrlp.vim'                    " 强大的文件搜索
+    " Plug 'tacahiroy/ctrlp-funky' " 配合 ctrlp
+    Plug 'Yggdroot/indentLine'                 " 自动显示缩进线
 
-    Plug 'skywind3000/asyncrun.vim'         "异步后台编译运行
+    Plug 'skywind3000/asyncrun.vim'            " 异步后台编译运行
 
-    Plug 'lervag/vimtex'                    "Latex 插件
+    Plug 'lervag/vimtex'                       " Latex 插件
     " Plug 'vim-latex/vim-latex'
-    Plug 'godlygeek/tabular'                "老牌对齐排版工具
-    Plug 'plasticboy/vim-markdown'          "高亮 Markdown, 依赖 tabular
-    Plug 'iamcco/mathjax-support-for-mkdp'  "预览数学公式
-    Plug 'iamcco/markdown-preview.vim'      "实时预览 Markdown
+    " Plug 'godlygeek/tabular'                   " 老牌对齐排版工具
+    Plug 'junegunn/vim-easy-align'             " 对齐排版工具
+    Plug 'Raimondi/delimitMate'                " 括号配对
+    Plug 'plasticboy/vim-markdown'             " 高亮 Markdown, 依赖 tabular
+    Plug 'iamcco/mathjax-support-for-mkdp'     " 预览数学公式
+    Plug 'iamcco/markdown-preview.vim'         " 实时预览 Markdown
     Plug 'jszakmeister/markdown2ctags'
-    " Plug 'JamshedVesuna/vim-markdown-preview'
 
     " On-damand loading of plugins
     function! BuildYCM(info)
@@ -63,7 +69,8 @@
         endif
     endfunction
     Plug 'Valloric/YouCompleteMe',	{'do': function('BuildYCM')}	"强大的自动补全
-    " Plug 'rdnetto/YCM-Generator', {'branch': 'stable'}  "搭配 YCM 使用
+    Plug 'tenfyzhong/CompleteParameter.vim'
+    Plug 'Shougo/neocomplete.vim'
     Plug 'junegunn/fzf', {'do': './install --all'}		"强大的文件搜索
     " Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 
@@ -137,7 +144,7 @@
         set cmdheight=1        "设定命令行的行数为1
         set textwidth=80       "设定一行输入字符的长度
         set wrap               "自动折行
-        set clipboard=unnamed  "访问系统剪贴板
+        set clipboard+=unnamed  "访问系统剪贴板
         set autoread           "自动读取修改了的文件
     endfunction
     call BasicSetting()
@@ -157,7 +164,7 @@
         set foldmethod=manual  "设置手动折叠
         set foldmethod=indent  "设置缩进折叠
         set foldcolumn=0       "设置折叠区域的宽度
-        setlocal foldlevel=1   "设置折叠层数为...
+        setlocal foldlevel=0   "设置折叠层数为...
         " set foldclose=all      "设置为自动关闭折叠
         nnoremap <space> @=((foldclosed(line('.'))<0) ? 'zc' : 'zo')<CR>     "用空格键来开关折叠
     endfunction
@@ -183,8 +190,8 @@
                     hi PmenuSel     cterm=BOLD ctermbg=darkgreen ctermfg=234
                     hi StatusLine   cterm=reverse
                     hi Folded       cterm=BOLD ctermbg=black     ctermfg=246
-                    hi SignColumn   cterm=NONE ctermbg=black     ctermfg=none
-                    hi Error        cterm=NONE ctermbg=black     ctermfg=red
+                    hi SignColumn   cterm=NONE ctermbg=black     ctermfg=none   gui=NONE guifg=NONE guibg=#073642
+                    hi Error        cterm=NONE ctermbg=black     ctermfg=red    gui=bold guifg=red 
                     hi Todo         cterm=NONE ctermbg=black     ctermfg=yellow
                 else                      "light
                     hi CursorLine   cterm=NONE ctermbg=lightgrey ctermfg=none
@@ -193,7 +200,7 @@
                     hi PmenuSel     cterm=BOLD ctermbg=darkcyan  ctermfg=yellow
                     hi StatusLine   cterm=inverse
                     hi StatusLineNC cterm=none ctermbg=grey
-                    hi SignColumn   cterm=NONE ctermbg=lightgrey ctermfg=none
+                    hi SignColumn   cterm=NONE ctermbg=lightgrey ctermfg=none gui=NONE guifg=NONE  guibg=#eee8d5
                 endif
             elseif a:name == 'dracula'
                 if &background == "dark"
@@ -209,12 +216,17 @@
         if has("gui_running")
             " set background=dark "实际上light才会给出正确的solarized配色
             call MyColorScheme('solarized', 'dark')
+            call MyColorScheme('solarized', 'light')
+            colorscheme violet
+            set guicursor=a:block-blinkon0
+            set guifont=Hack:h14
+            set guioptions=t
         elseif $FROM_SSH == 'TRUE'
             call MyColorScheme('Monokai', 'light')
         else 
-            call MyColorScheme('dracula', 'light')
-            call MyColorScheme('Monokai', 'dark')
-            call MyColorScheme('solarized', 'light')
+            " call MyColorScheme('dracula', 'light')
+            " call MyColorScheme('Monokai', 'dark')
+            " call MyColorScheme('solarized', 'light')
             call MyColorScheme('solarized', 'dark')
         endif
     endfunction
@@ -262,9 +274,12 @@
         nmap <Leader>S :wq<cr>      "快速保存并退出
         nmap <Leader>q :q<cr>       "不保存退出
         nmap <Leader>Q :q!<cr>      "不保存强制退出
-        map <silent> <leader>z :source ~/.vimrc<cr>  "重载.vimrc
-        map <silent> <leader><leader>e  :e ~/.vimrc<cr>   "编辑.vimrc
-        autocmd! bufwritepost .vimrc source ~/.vimrc "编辑.vimrc过后立即重载
+        map <silent> <leader>z :source $MYVIMRC<cr>  "重载.vimrc
+        map <silent> <leader><leader>e  :e $MYVIMRC<cr>   "编辑.vimrc
+        augroup reload_vimrc
+            autocmd!
+            autocmd BufWritePost $MYVIMRC source % | YcmRestartServer "编辑.vimrc过后立即重载
+        augroup END
     endfunction
     call SetVimrc()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -330,31 +345,37 @@
         function! YCMTrigger()
             if g:ycm_auto_trigger == 0
                 let g:ycm_auto_trigger = 1
-                echom "YCM turns on"
+                echom 'YCM turns on'
             else
                 let g:ycm_auto_trigger = 0
-                echom "YCM turns off"
+                echom 'YCM turns off'
             endif
         endfunction
         nnoremap <leader>y :call YCMTrigger()<CR>
+        
+        augroup myycm
+            autocmd!
+            au SourceCmd $MYVIMRC YcmRestartServer 
+        augroup END
 
         "让Vim的补全菜单行为与一般IDE一致（参考VimTip1228）
-        set completeopt=longest,menu
+        " 绝对不要加 longest
+        set completeopt=menu
         "离开插入模式后自动关闭预览窗口
         " autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-        "回车即选中当前项
-        inoremap <expr> <CR> pumvisible() ? '<C-y>' : '<CR>'
         "打开错误诊断
         nmap <F7> :YcmDiags<CR>
-        "上下左右键的行为会显示其他信息（insert mode shortcuts）
-        inoremap <expr> <Down>     pumvisible() ? '<C-n>' : '<Down>'
-        inoremap <expr> <Up>       pumvisible() ? '<C-p>' : '<Up>'
-        inoremap <expr> <c-d> pumvisible() ? '<PageDown><C-p><C-n>' : '<PageDown>'
-        inoremap <expr> <c-u> pumvisible() ? '<PageUp><C-p><C-n>' : '<PageUp>'
-        "ipython解释器路径
-        " 如果vim支持python3而不是2,就需指定python解释器路径
-        " let g:ycm_server_python_interpreter='/usr/bin/python'
-        " let g:ycm_path_to_python_interpreter='/usr/bin/python'
+            "上下左右键的行为会显示其他信息（insert mode shortcuts）
+            " inoremap <expr> <Down>     pumvisible() ? '<C-n>' : '<Down>'
+            " inoremap <expr> <Up>       pumvisible() ? '<C-p>' : '<Up>'
+            " inoremap <expr> <c-d> pumvisible() ? '<PageDown><C-p><C-n>' : '<PageDown>'
+            " inoremap <expr> <c-u> pumvisible() ? '<PageUp><C-p><C-n>' : '<PageUp>'
+        
+            "ipython解释器路径
+            " 如果vim支持python3而不是2,就需指定python解释器路径
+            " let g:ycm_server_python_interpreter='/usr/bin/python'
+            " let g:ycm_path_to_python_interpreter='/usr/bin/python'
+        "回车选中当前项
         let g:ycm_key_list_stop_completion = ['<CR>']
         "关闭加载.ycm_extra_conf.py提示
         let g:ycm_confirm_extra_conf=0
@@ -374,12 +395,23 @@
         let g:ycm_autoclose_preview_window_after_completion= 1
         "如果上上一项为0或上一项为1,则无关紧要
         let g:ycm_autoclose_preview_window_after_insertion = 1
+        
 
         let g:ycm_use_ultisnips_completer = 1 "New one
         "跳转到定义处
         nnoremap <leader>g :YcmCompleter GoTo<CR>
         "改正错误，只适用于 C-family language.
         nmap <tab> :YcmCompleter FixIt<CR>
+        "YCM 白名单
+        " let g:ycm_filetype_whitelist = {
+        "     \ 'python': 1,
+        "     \ 'c' : 1,
+        "     \ 'cpp': 1,
+        "     \ 'f90': 1,
+        "     \ 'md': 1,
+        "     \ 'tex': 1,
+        "     \ 'bash': 1,
+        "     \}
         "判断是否再虚拟环境中，确保YouCompleteMe能找到相应的site packages文件夹
         "python with virtualenv support
         " py << EOF
@@ -392,7 +424,7 @@
         " EOF
     endfunction
     call SetYCM()
-
+    
 " Ultisnips
     function! SetUltiSnips()
         let g:UltiSnipsSnippetDirectories=['UltiSnips']
@@ -425,6 +457,19 @@
     endfunction
     call SetUltiSnips()
 
+" CompleteParameter
+    function! SetCompleteParameter()
+        inoremap <silent><expr> ( complete_parameter#pre_complete("()")
+        let g:complete_parameter_use_ultisnips_mapping = 1
+    endfunction
+    call SetCompleteParameter()
+
+" Neocomplete
+    " function! SetNeocomplete()
+    "
+    " endfunction
+    " call SetNeocomplete()
+    
 " Nerdtree
     " map <F4> :NERDTreeToggle<CR>     "设置F4为打开nerdtree的快捷键
     let g:NERDTreeWinSize=30
@@ -522,6 +567,17 @@
 
 " Vimtex
     function! SetVimtex()
+        let g:vimtex_enabled = 0
+        function! VimtexTrigger()
+            if g:vimtex_enabled == 0
+                let g:vimtex_enabled = 1
+                echom "vimtex turns on"
+            else
+                let g:vimtex_enabled = 0
+                echom "vimtex turns off"
+            endif
+        endfunction
+        nnoremap <leader>v :call VimtexTrigger()<CR>
         " automatically jump to the first error 
         " but not work well with continuous compilation
         let g:vimtex_quickfix_autojump = 0
@@ -590,15 +646,27 @@
         " 设置为 1 则所有文件都可以用命令 MarkdownPreview
         " 进行预览，默认只有markdown文件可以使用该命令
         let g:mkdp_command_for_global= 0
-        nmap <silent> <c-p> <Plug>MarkdownPreview
-        nmap <silent> <c-m> <Plug>StopMarkdownPreview
-        imap <silent> <c-p> <Plug>MarkdownPreview
-        imap <silent> <c-m> <Plug>StopMarkdownPreview
+
+        function! MarkdownPreviewTrigger()
+            if g:mkdp_server_started == 0
+                :MarkdownPreview
+            else
+                :MarkdownPreviewStop
+            endif
+        endfunction
+        nnoremap <c-p> :call MarkdownPreviewTrigger()<CR>
+        " nmap <silent> <c-p> <Plug>MarkdownPreview
+        " nmap <silent> <c-m> <Plug>StopMarkdownPreview
+        " imap <silent> <c-m> <Plug>StopMarkdownPreview
     endfunction 
     call SetMarkdownPreview()
 
 " Easymotion
     function! SetEasymotion()
+        " 关闭默认映射
+        let g:Easymotion_do_mapping = 1
+        " 大小写不敏感
+        let g:Easymotion_smartcase = 1
         " 跨窗口搜索一（两）个字母
         map f <Plug>(easymotion-overwin-f)
         map s <Plug>(easymotion-overwin-f2)
@@ -606,7 +674,7 @@
         map <Leader>w <Plug>(easymotion-bd-w)
         map <Leader>e <Plug>(easymotion-bd-e)
         " 覆盖 vim 字符串搜索，可以跨窗口
-        map / <Plug>(easymotion-sn)
+        " map / <Plug>(easymotion-sn)
         " line motion 
         map <Leader>l <Plug>(easymotion-lineforward)
         map <Leader>j <Plug>(easymotion-j)
@@ -614,6 +682,36 @@
         map <Leader>h <Plug>(easymotion-linebackward)
     endfunction
     call SetEasymotion()
+
+" Incsearch (fuzzy and easymotion)
+    function! SetIncsearch()
+        " 结合 easymotion 后没有必要再需要区分往前、往后搜索
+        " 增量搜索与 easymotion 结合
+        function! s:incsearch_config(...) abort
+            return incsearch#util#deepextend(deepcopy({
+            \   'modules': [incsearch#config#easymotion#module({'overwin': 1})],
+            \   'keymap': {
+            \     "\<CR>": '<Over>(easymotion)'
+            \   },
+            \   'is_expr': 0
+            \ }), get(a:, 1, {}))
+        endfunction
+        noremap <silent><expr> / incsearch#go(<SID>incsearch_config({'is_stay': 1}))
+        " 增量模糊搜索与 easymotion 结合
+        function! s:config_easyfuzzymotion(...) abort
+            return extend(copy({
+            \   'converters': [incsearch#config#fuzzyword#converter()],
+            \   'modules': [incsearch#config#easymotion#module({'overwin': 1})],
+            \   'keymap': {
+            \     "\<CR>": '<Over>(easymotion)'
+            \   },
+            \   'is_expr': 0,
+            \   'is_stay': 1,
+            \ }), get(a:, 1, {}))
+        endfunction
+        noremap <silent><expr> z/ incsearch#go(<SID>config_easyfuzzymotion())
+    endfunction 
+    call SetIncsearch()
 
 " Fzf
     function! SetFzf() 
@@ -666,8 +764,22 @@
 " ALE
     function! SetALE() 
         autocmd FileType * noremap <buffer> <Leader><Leader>c :ALELint<CR>
+        " 只有来自 g:ale_linters 和 b:ale_linters 中的 linters 会被启动
+        let g:ale_linters_explicit = 1
+        " bash 文件会运行 sh 的 linter
+        let g:ale_linter_aliases = {'bash': 'sh',
+                                    \'zsh': 'sh',
+                                    \'vimwiki': 'markdown',
+                                    \}
+        let g:ale_linters_ignore = {'python': ['pylint'],
+                                   \'fortran': ['gcc'],
+                                   \}
         let g:ale_linters = {'python': ['flake8','pycodestyle'],
+                            \'sh': ['shellcheck'],
+                            \'vim': ['vint'],
+                            \'fortran': ['gcc', 'language_server'],
                             \'c':['clang']}
+        " 忽略 pylint 
         let g:ale_python_pycodestyle_options='--ignore=E305 %s'
         let g:ale_python_flake8_options='--ignore=E305 %s'
         let g:ale_lint_on_enter = 1
@@ -699,10 +811,17 @@
         let g:autoformat_autoindent=0
         let g:autoformat_retab=0
         let g:autoformat_remove_trailing_spaces=0
+        " let g:autoformat_verbosemode=1
         autocmd FileType vim,tex let b:autoformat_autoindent=0
         au BufWrite * :Autoformat
     endfunction
     call SetAutoformat()
+
+" Pangu
+    function! SetPangu()
+        autocmd BufWritePre *.markdown,*.md,*.text,*txt,*.wiki,*.cnx call PanGuSpacing()
+    endfunction
+    call SetPangu()
 
 " AsyncRun
     function! SetAsyncRun()
@@ -742,6 +861,7 @@
         "     " autocmd User AsyncRunStart * call asyncrun#quickfix_toggle(8,1)
         " augroup END
         augroup vimrc
+            autocmd!
             autocmd QuickFixCmdPost * call asyncrun#quickfix_toggle(10,1)
         augroup END
     endfunction
@@ -761,6 +881,13 @@
     endfunction
     call SetPowerline()
 
+" Easy-Align
+    function! SetEasyAlign()
+        xmap ga <Plug>(EasyAlign)
+        nmap ga <Plug>(EasyAlign)
+    endfunction
+    call SetEasyAlign()
+
 " IndentLine
     " let g:indentLine_setConceal = 0
     nmap <leader>i :IndentLinesToggle<cr>
@@ -772,5 +899,4 @@
     " " let g:vimim_punctuation = 2
     " let g:vimim_shuangpin = 1
     " let g:vimim_toggle = 'sogou,pinyin'
-
 
