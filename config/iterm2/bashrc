@@ -1,39 +1,147 @@
-export CLICOLOR=1
-export LSCOLORS=gxfxcxdxbxegedabagacad
-#### ALIAS
-alias ssh2='ssh -X xuwutao@124.16.143.99'
-alias sfat='ssh -X xuwutao@159.226.161.107 -i ~/.ssh/xuwutao_id_rsa'
-alias svultr='ssh root@144.202.41.163'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias vim='vim --servername vim'
-alias ll='ls -hl'
-alias la='ls -A'
-alias l='ls -CF'
-alias lla='ls -hAl'
+# 第一次 source 此文件时 HAS_SOURCED 会被赋值为 1
+# 此后 HAS_SOURCED 的值不会再变，等于0
+HAS_SOURCED=${HAS_SOURCED-0}
+export HAS_SOURCED
+# echo "$HAS_SOURCED"
 
-#### BINGDINGS
-bind 'set completion-ignore-case on'
-bind 'set visible-stats on'
+# run_one_time(){
+#     # 参数为 function
+#     # 只在第一次 source 的时候运行函数
+#     [ "$HAS_SOURCED" = 0 ] && $1
+# }
+function add_path {
+    if [[ "$PATH" =~ $1 ]]; then
+        return 0
+    else
+        PATH=$1:$PATH
+    fi 
+}
 
-#### FOR AUTOJUMP
-[[ -s /usr/local/Cellar/autojump/22.5.1/etc/autojump.sh ]] && . /usr/local/Cellar/autojump/22.5.1/etc/autojump.sh
+function set_bash {
+    export EDITOR=vim
+    HISTCONTROL=ignoreboth
+    HISTSIZE=1000
+    HISTFILESIZE=2000
+    eval "$(gdircolors -b ~/.dir_colors)"
 
-#### FOR POWERLINE
-export PATH=/Users/xuwutao/Library/Python/2.7/bin:$PATH
-powerline-daemon -q
-POWERLINE_BASH_CONTINUATION=1
-POWERLINE_BASH_SELECT=1
-source /Users/xuwutao/Library/Python/2.7/lib/python/site-packages/powerline/bindings/bash/powerline.sh
+    # ALIAS
+    function set_alias {
+        alias office='ssh -X xuwutao@124.16.143.99'
+        alias itp='ssh -X xuwutao@159.226.161.107 -i ~/.ssh/xuwutao_id_rsa'
+        alias vultr='ssh vultrxu@207.246.99.248'
+        alias linode='ssh linodexu@172.105.209.32'
+        alias sccas='ssh guozk1@159.226.184.211'
+        alias ..='cd ..'
+        alias ...='cd ../..'
+        alias vim='vim --servername vim'
+        alias ls='gls --color=auto'
+        alias ll='ls -hl'
+        alias la='ls -A'
+        alias l='ls -CF'
+        alias lla='ls -hAl'
+        alias grep='grep --color=auto'
+        alias tree='tree -N'
+        alias jupyter='nohup jupyter-notebook > ~/Documents/python/jupyter/jupyter.log 2>&1 &'
+    }
+    set_alias
 
-#### FOR SSH
-export office=xuwutao@124.16.143.99:/home/xuwutao
-export xuwutao="-i ~/.ssh/xuwutao_id_rsa xuwutao@159.226.161.107:/public/home/xuwutao"
+    # BINGDINGS
+    function set_binding {
+        bind 'set completion-ignore-case on'
+        bind 'set visible-stats on'
+    }
+    set_binding
 
-#### FOR FZF
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+    # PATH
+    function set_path {
+        # PATH=$HOME/Program/bin:$PATH
+        add_path $HOME/Program/bin
+        add_path /Users/xuwutao/Library/Python/2.7/bin
+        add_path /Users/xuwutao/Library/Python/3.7/bin
 
-#### FOR PYTHON
-source /Users/xuwutao/Library/Python/2.7/bin/virtualenvwrapper.sh
+        if [ -f /usr/local/share/bash-completion/bash_completion ]; then
+            . /usr/local/share/bash-completion/bash_completion
+        fi
+    }
+    set_path
+}
+set_bash
 
-export PATH=/Users/xuwutao/Library/Python/2.7/bin:$PATH
+function set_plugins {
+    function set_promptline {
+        [ -f ~/.shell_prompt.sh ] && source ~/.shell_prompt.sh
+    }
+    set_promptline
+
+    # FOR PYTHON
+    function set_virtualenvwrapper {
+        export WORKON_HOME=$HOME/.virtualenvs
+        export VIRTUALENVWRAPPER_SCRIPT=$HOME/Library/Python/2.7/bin/virtualenvwrapper.sh
+        source $HOME/Library/Python/2.7/bin/virtualenvwrapper_lazy.sh
+    }
+    set_virtualenvwrapper
+
+    # FOR AUTOJUMP
+    [[ -s /usr/local/Cellar/autojump/22.5.1/etc/autojump.sh ]] && . /usr/local/Cellar/autojump/22.5.1/etc/autojump.sh
+
+    # FOR FZF
+    [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+}
+set_plugins
+
+function set_network {
+    # FOR SHADOWSOCKS
+    IS_SHADOWSOCKS=0
+    function shellshadowsocks() {
+        if [ $IS_SHADOWSOCKS == 0 ]; then
+            echo "shadowsocks turns ON"
+            IS_SHADOWSOCKS=1
+            export ALL_PROXY=socks5://127.0.0.1:1080
+        else
+            echo "shadowsocks turns OFF"
+            IS_SHADOWSOCKS=0
+            unset ALL_PROXY
+        fi
+    }
+    function issocks() {
+        [ $IS_SHADOWSOCKS == 0 ] && echo "shadowsocks is OFF" || echo "shadowsocks is ON"
+    }
+
+    # FOR SSH
+    function set_ssh {
+        export office=xuwutao@124.16.143.99:/home/xuwutao
+        export xuwutao="-i ~/.ssh/xuwutao_id_rsa xuwutao@159.226.161.107:/public/home/xuwutao"
+        export vultr=vultrxu@207.246.99.248:/home/vultrxu
+        export linode=linodexu@172.105.209.32:/home/linodexu
+        export sccas=guozk1@159.226.184.211:/home/guozk1
+    }
+    set_ssh
+}
+set_network
+
+function set_cosmos {
+    # FOR INTEL COMPILER
+    # echo "set fortran compiler"
+    source $HOME/Program/intel/compilers_and_libraries/mac/bin/compilervars.sh -arch intel64 -platform mac
+    if [ "$HAS_SOURCED" = 0 ]; then
+        # FOR OPENMPI
+        PATH=$HOME/Program/openmpi-2.1.3/bin:$PATH
+        TMPDIR=/tmp
+        # FOR HEALPIX
+        PATH=$HOME/Program/Healpix_3.31/bin:$PATH
+        # FOR COSMOMC
+        PYTHONPATH=$HOME/Work/project/cmb_dipole/CosmoMC-June2016/python:$PYTHONPATH
+        # FOR CIFITSIO
+        DYLD_LIBRARY_PATH=$HOME/Program/cfitsio3390/lib:${DYLD_LIBRARY_PATH}
+    fi
+}
+# time set_cosmos
+set_cosmos
+# exec fish
+
+HAS_SOURCED=1
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

@@ -15,44 +15,41 @@
 
     " Make sure using single quotes
     " Shorthand notation for full URL.
-    Plug 'icymind/NeoSolarized'
-    " Plug 'dracula/vim',{'as':'dracula'}     " `as` will install the plugin in
-                                            " a directory called 'dracula' instead
-                                            " of 'vim'
-    Plug 'ashfinal/vim-colors-violet'       "
     Plug 'altercation/vim-colors-solarized'
-    " Plug 'flazz/vim-colorschemes'            "主题合集
-    Plug 'yianwillis/vimcdoc'                  " 中文帮助文档
-    Plug 'scrooloose/nerdtree'                 " 文件树浏览
-    Plug 'majutsushi/tagbar'                   " 文件结构
-    Plug 'tpope/vim-fugitive'                  " 管理 Git 仓库
+    Plug 'flazz/vim-colorschemes'            "主题合集
+    Plug 'vim-airline/vim-airline'                             " 状态栏
+    Plug 'vim-airline/vim-airline-themes'                      " airline 主题
+    Plug 'edkolev/promptline.vim'                              " bash 提示符
+    Plug 'yianwillis/vimcdoc'                                  " 中文帮助文档
+    Plug 'scrooloose/nerdtree',{'on':'NERDTreeToggle'}         " 文件树浏览
+    Plug 'majutsushi/tagbar',{'on':['Tagbar', 'TagbarToggle', 'TagbarOpen']} " 文件结构
+    Plug 'tpope/vim-fugitive'                                  " 管理 Git 仓库
 
-    Plug 'SirVer/ultisnips'                    " 代码块补全
-    Plug 'honza/vim-snippets'                  " 配合 ultisnips
-    Plug 'w0rp/ale'                            " 异步语法检查
-    Plug 'chiel92/vim-autoformat'              " 自动格式化代码
-    Plug 'hotoo/pangu.vim'                     " 自动格式化、标准化中文排版
+    Plug 'SirVer/ultisnips'                                    " 代码块补全
+    Plug 'honza/vim-snippets'                                  " 配合 ultisnips
+    Plug 'w0rp/ale'                                            " 异步语法检查
+    Plug 'chiel92/vim-autoformat'                              " 自动格式化代码
+    Plug 'hotoo/pangu.vim'                                     " 自动格式化、标准化中文排版
 
-    Plug 'scrooloose/nerdcommenter'            " 批量、快速注释
-    Plug 'easymotion/vim-easymotion'           " 快速查找定位
-    Plug 'haya14busa/incsearch.vim'            " 增量搜索
-    Plug 'haya14busa/incsearch-fuzzy.vim'      " 模糊增量搜索
-    Plug 'haya14busa/incsearch-easymotion.vim' " 增量搜索与 easymotion 结合
-    " Plug 'kien/ctrlp.vim'                    " 强大的文件搜索
-    " Plug 'tacahiroy/ctrlp-funky' " 配合 ctrlp
-    Plug 'Yggdroot/indentLine'                 " 自动显示缩进线
+    Plug 'scrooloose/nerdcommenter'                            " 批量、快速注释
+    Plug 'easymotion/vim-easymotion'                           " 快速查找定位
+    Plug 'haya14busa/incsearch.vim'                            " 增量搜索
+    Plug 'haya14busa/incsearch-fuzzy.vim'                      " 模糊增量搜索
+    Plug 'haya14busa/incsearch-easymotion.vim'                 " 增量搜索与 easymotion 结合
+    Plug 'Yggdroot/indentLine'                                 " 自动显示缩进线
 
-    Plug 'skywind3000/asyncrun.vim'            " 异步后台编译运行
+    Plug 'skywind3000/asyncrun.vim',{'on':'AsyncRun'}          " 异步后台编译运行
 
-    Plug 'lervag/vimtex'                       " Latex 插件
-    " Plug 'vim-latex/vim-latex'
-    " Plug 'godlygeek/tabular'                   " 老牌对齐排版工具
-    Plug 'junegunn/vim-easy-align'             " 对齐排版工具
-    Plug 'Raimondi/delimitMate'                " 括号配对
-    Plug 'plasticboy/vim-markdown'             " 高亮 Markdown, 依赖 tabular
-    Plug 'iamcco/mathjax-support-for-mkdp'     " 预览数学公式
-    Plug 'iamcco/markdown-preview.vim'         " 实时预览 Markdown
-    Plug 'jszakmeister/markdown2ctags'
+    " Plug 'lervag/vimtex',{'for': 'tex'}                        " Latex 插件
+    Plug 'lervag/vimtex'                        " Latex 插件
+    Plug 'junegunn/vim-easy-align'                             " 对齐排版工具
+    Plug 'Raimondi/delimitMate'                                " 括号配对
+    Plug 'plasticboy/vim-markdown',{'for': 'markdown'}         " 高亮 Markdown, 依赖 tabular
+    " Plug 'suan/vim-instant-markdown'
+    " Plug 'shime/vim-livedown'
+    Plug 'iamcco/mathjax-support-for-mkdp',{'for': 'markdown'} " 预览数学公式
+    Plug 'iamcco/markdown-preview.vim',{'for':'markdown'}      " 实时预览 Markdown
+    Plug 'jszakmeister/markdown2ctags',{'for':'markdown'}
 
     " On-damand loading of plugins
     function! BuildYCM(info)
@@ -68,11 +65,9 @@
             " !bash ~/config/youcom.sh "for ITP
         endif
     endfunction
-    Plug 'Valloric/YouCompleteMe',	{'do': function('BuildYCM')}	"强大的自动补全
-    Plug 'tenfyzhong/CompleteParameter.vim'
-    Plug 'Shougo/neocomplete.vim'
-    Plug 'junegunn/fzf', {'do': './install --all'}		"强大的文件搜索
-    " Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
+    Plug 'Valloric/YouCompleteMe',	{'do': function('BuildYCM'), 'on': []} " 强大的自动补全
+    " Plug 'tenfyzhong/CompleteParameter.vim'
+    Plug 'junegunn/fzf', {'do': './install --all'}               " 强大的文件搜索
 
     " Initialize plugin system
     call plug#end()
@@ -91,9 +86,10 @@
         set formatoptions+=nM
         set fileencodings=utf-8,gbk
         
-        if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
-            set ambiwidth=double
-        endif 
+        " if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
+        "     " set ambiwidth=double
+        "     set ambiwidth=single
+        " endif
     else 
         echoerr 'Sorry, this version of (g)vim was not compiled with +multi_byte'
     endif 
@@ -134,6 +130,8 @@
         set noerrorbells       "关闭错误信息响铃
         set novisualbell       "关闭使用可视响铃代替呼叫
         set t_vb=              "置空错误铃声的终端代码
+        set updatetime=100
+        set noswapfile
 
         set noshowmatch        "插入括号时，短暂地跳转到匹配的括号上去
         set matchtime=2        "设置上一条命令的持续时间
@@ -153,6 +151,7 @@
     function! SetStatusLine()
         set laststatus=2       "显示状态栏（默认值为1，无法显示状态栏）
         set showtabline=2
+        set noshowmode
         set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ %c:%l/%L%)\             "设置在状态行显示的信息
     endfunction
     call SetStatusLine()
@@ -216,10 +215,11 @@
         if has('gui_running')
             " set background=dark "实际上light才会给出正确的solarized配色
             call MyColorScheme('solarized', 'dark')
-            call MyColorScheme('solarized', 'light')
-            colorscheme violet
+            " call MyColorScheme('solarized', 'light')
+            " colorscheme violet
             set guicursor=a:block-blinkon0
-            set guifont=Hack:h14
+            set guifont=Hack\ Regular\ Nerd\ Font\ Complete:h14
+            set guifontwide=Inconsolata-g\ for\ Powerline:h14
             set guioptions=t
         elseif $FROM_SSH ==? 'TRUE'
             call MyColorScheme('Monokai', 'light')
@@ -279,8 +279,11 @@
         map <silent> <leader>z :source $MYVIMRC<cr>  "重载.vimrc
         map <silent> <leader><leader>e  :e $MYVIMRC<cr>   "编辑.vimrc
         augroup reload_vimrc
+            "编辑.vimrc过后立即重载
             autocmd!
-            autocmd BufWritePost $MYVIMRC source % | YcmRestartServer "编辑.vimrc过后立即重载
+            autocmd BufWritePost $MYVIMRC source %
+            autocmd BufWritePost,SourceCmd $MYVIMRC YcmRestartServer
+            autocmd BufWritePost $MYVIMRC AirlineRefresh
         augroup END
     endfunction
     call SetVimrc()
@@ -354,17 +357,17 @@
             endif
         endfunction
         nnoremap <leader>y :call YCMTrigger()<CR>
-        
-        augroup myycm
+
+        " 延迟加载
+        augroup load_ycm
             autocmd!
-            au SourceCmd $MYVIMRC YcmRestartServer 
+            autocmd CursorHold,CursorHoldI *  call plug#load('YouCompleteMe')
+                        \| call youcompleteme#Enable() | autocmd! load_ycm
         augroup END
 
         "让Vim的补全菜单行为与一般IDE一致（参考VimTip1228）
         " 绝对不要加 longest
-        set completeopt=menu
-        "离开插入模式后自动关闭预览窗口
-        " autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+        set completeopt=menu,menuone
         "打开错误诊断
         nmap <F7> :YcmDiags<CR>
             "上下左右键的行为会显示其他信息（insert mode shortcuts）
@@ -390,7 +393,7 @@
         "在字符串中也能补全
         let g:ycm_complete_in_strings = 1
         "注释和字符串中的文字也会被收入补全
-        let g:ycm_collect_identifiers_from_comments_and_strings = 0
+        let g:ycm_collect_identifiers_from_comments_and_strings = 1
         "如果选中项基于语义,则在文件上方弹出其详细信息
         let g:ycm_add_preview_to_completeopt = 0 "New one
         "补全后自动关闭预览窗口,如果上一项为0,则无关紧要
@@ -398,12 +401,28 @@
         "如果上上一项为0或上一项为1,则无关紧要
         let g:ycm_autoclose_preview_window_after_insertion = 1
         
+        let g:ycm_key_invoke_completion = '<leader><leader>s'
+        let g:ycm_semantic_triggers = {
+                    \'c,cpp,python,f90': ['re!\w{2}']
+                    \}
 
         let g:ycm_use_ultisnips_completer = 1 "New one
         "跳转到定义处
         nnoremap <leader>g :YcmCompleter GoTo<CR>
         "改正错误，只适用于 C-family language.
         nmap <tab> :YcmCompleter FixIt<CR>
+        "YCM 黑名单
+        let g:ycm_filetype_blacklist = {
+                    \ 'tagbar'  : 1,
+                    \ 'qf'  : 1,
+                    \ 'notes'  : 1,
+                    \ 'unite'  : 1,
+                    \ 'text'  : 1,
+                    \ 'vimwiki' : 1,
+                    \ 'pandoc'  : 1,
+                    \ 'infolog' : 1,
+                    \ 'mail'    : 1,
+                    \}
         "YCM 白名单
         " let g:ycm_filetype_whitelist = {
         "     \ 'python': 1,
@@ -458,13 +477,6 @@
             " " au InsertEnter * exec 'inoremap <silent> ' . g:UltiSnipsJumpBackwardTrigger . '<C-R>=g:UltiSnips_Reverse()<cr>'
     endfunction
     call SetUltiSnips()
-
-" CompleteParameter
-    function! SetCompleteParameter()
-        inoremap <silent><expr> ( complete_parameter#pre_complete("()")
-        let g:complete_parameter_use_ultisnips_mapping = 1
-    endfunction
-    call SetCompleteParameter()
 
 " Neocomplete
     " function! SetNeocomplete()
@@ -538,7 +550,7 @@
             let g:tagbar_vertical = 0
         endfunction
         nnoremap <F8> :call ToggleNERDTreeAndTagbar()<CR>
-        " Add support for markdown files 
+        " Add support for markdown files, 配合插件 markdown2ctags
         let g:tagbar_type_markdown = {
             \ 'ctagstype': 'markdown',
             \ 'ctagsbin': '~/.vim/vim_plugin/markdown2ctags/markdown2ctags.py',
@@ -569,7 +581,7 @@
 
 " Vimtex
     function! SetVimtex()
-        let g:vimtex_enabled = 0
+        let g:vimtex_enabled = 1
         function! VimtexTrigger()
             if g:vimtex_enabled == 0
                 let g:vimtex_enabled = 1
@@ -589,7 +601,12 @@
         if !exists('g:ycm_semantic_triggers')
             let g:ycm_semantic_triggers = {}
         endif
-        let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
+        au VimEnter,BufNewFile,BufReadPre *.tex
+                    \   if !exists('g:ycm_semantic_triggers')
+                    \ |     let g:ycm_semantic_triggers = {}
+                    \ | endif
+                    \ | let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
+        " let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
         let g:vimtex_compiler_latexmk = {
             \ 'background' : 1,
             \ 'build_dir' : '',
@@ -622,16 +639,19 @@
         " fenced code block languages
         let g:vim_markdown_fenced_languages = ['python=py', 'viml=vim', 'bash=sh', 'c++=cpp']
         let g:vim_markdown_folding_disabled = 1
+        let g:vim_markdown_folding_style_pythonic = 1
         " set header folding level
         let g:vim_markdown_folding_level = 6
         let g:vim_markdown_toc_autofit = 1
         " adjust new list item indent
         let g:vim_markdown_new_list_item_indent = 2
         " disable math conceal with LaTex math syntax enabled
-        " let g:tex_conceal = ""
+        let g:tex_conceal = ''
         let g:vim_markdown_math = 1
         " syntax concealing
         let g:vim_markdown_conceal = 0
+        " YAML Front Matter
+        let g:vim_markdown_frontmatter = 1
     endfunction
     call SetVimmarkdown()
 
@@ -660,6 +680,21 @@
         inoremap <c-p> :call MarkdownPreviewTrigger()<CR>
     endfunction 
     call SetMarkdownPreview()
+
+" Vim-InstantMarkdown
+    function! SetInstantMarkdown()
+        let g:instant_markdown_autostart = 0
+        let g:instant_markdown_allow_unsafe_content = 1
+    endfunction
+    " call SetInstantMarkdown()
+
+" Vim-livedown
+    function! SetLivedown()
+        let g:livedown_autorun = 0
+        let g:livedown_open = 1
+        let g:livedown_browser = "safari"
+    endfunction
+    " call SetLivedown()
 
 " Easymotion
     function! SetEasymotion()
@@ -825,6 +860,7 @@
 
 " AsyncRun
     function! SetAsyncRun()
+        let $PYTHONUNBUFFERED=1
         " quick run
         imap <F5> <Esc>:call <SID>compile_and_run()<CR>
         nmap <F5> :call <SID>compile_and_run()<CR>
@@ -844,6 +880,8 @@
                 exec 'AsyncRun! python %'
             elseif &filetype ==? 'tex'
                 exec 'VimtexCompile'
+            elseif &filetype ==? 'ruby'
+                exec 'AsyncRun! time ruby %'
             endif
         endfunction 
         " bind <F9> to open quickfix window rapidly.
@@ -856,13 +894,10 @@
         " ring bell when finished.
         let g:asyncrun_exit = "silent call system('play ~/Music/notify/facebook.wav  &')"
         " open quickfix window in right way.
-        " augroup ASYNCRUN
-        "     autocmd QuickFixCmdPost * botright copen 8
-        "     " autocmd User AsyncRunStart * call asyncrun#quickfix_toggle(8,1)
-        " augroup END
         augroup vimrc
             autocmd!
-            autocmd QuickFixCmdPost * call asyncrun#quickfix_toggle(10,1)
+            " autocmd QuickFixCmdPost * call asyncrun#quickfix_toggle(10,1)
+            autocmd User AsyncRunStop call asyncrun#quickfix_toggle(10,1)
         augroup END
     endfunction
     call SetAsyncRun()
@@ -879,7 +914,87 @@
             python3 del powerline_setup
         endif
     endfunction
-    call SetPowerline()
+    " call SetPowerline()
+
+" Airline
+    function! SetAirline()
+        " let g:airline_theme='powerlineish'
+        let g:airline_theme='papercolor'
+        let g:airline_powerline_fonts = 1
+        let g:airline#extensions#tabline#enabled=1
+        let g:airline#extensions#tabline#show_tabs = 1
+        let g:airline_extensions#tabline#show_buffers = 1
+        " let g:airline#extensions#tabline#alt_sep = 1
+        let g:airline#extensions#tabline#buffer_nr_show = 1
+        " let g:airline_extensions = ['vimtex', 'tagbar']
+
+        " function! AirlineThemePatch(palette)
+        "     " [ guifg, guibg, ctermfg, ctermbg, opts ].
+        "     " See "help attr-list" for valid values for the "opt" value.
+        "     " http://vim.wikia.com/wiki/Xterm256_color_names_for_console.Vim
+        "     let a:palette.accents.running = [ '', '', '', '' ]
+        "     let a:palette.accents.success = [ '#00ff00', '', 'green', '', '' ]
+        "     let a:palette.accents.failure = [ '#ff0000', '', 'red', '', '' ]
+        " endfunction
+        " let g:airline_theme_patch_func = 'AirlineThemePatch'
+        " 根据状态 g:asyncrun_status 改变相应区域的颜色
+        " 'running': default, 'success': green, 'failure': red
+        " let g:async_status_old = ''
+        " function! Get_asyncrun_running()
+        "     let async_status = g:asyncrun_status
+        "     if async_status != g:async_status_old
+        "         if async_status == 'running'
+        "             call airline#parts#define_accent('asyncrun_status', 'running')
+        "         elseif async_status == 'success'
+        "             call airline#parts#define_accent('asyncrun_status', 'success')
+        "         elseif async_status == 'failure'
+        "             call airline#parts#define_accent('asyncrun_status', 'failure')
+        "         endif
+        "
+        "         let g:airline_section_x = airline#section#create(['asyncrun_status'])
+        "         AirlineRefresh
+        "         let g:async_status_old = async_status
+        "     endif
+        "     return async_status
+        " endfunction
+        " call airline#parts#define_function('asyncrun_status', 'Get_asyncrun_running')
+        " let g:airline_section_x = airline#section#create(['asyncrun_status'])
+    endfunction
+    call SetAirline()
+
+" Promptline
+    function! SetPromptline()
+        let git_sha_slice = {
+                    \'function_name': 'git_sha',
+                    \'function_body': [
+                        \'function git_sha {',
+                        \'  local sha',
+                        \'  sha=$(git rev-parse --short HEAD 2>/dev/null) || return 1',
+                        \'  printf "%s" "$sha"',
+                        \'}']}
+
+        " let g:promptline_preset = 'powerlineclone'
+        let g:promptline_preset = {
+                    \'c'    : [ promptline#slices#user(), promptline#slices#battery({'threshold': 30}) ],
+                    \'b'    : [ promptline#slices#python_virtualenv() ],
+                    \'a'    : [ promptline#slices#cwd({'dir_limit': 2}) ],
+                    \'y'    : [ promptline#slices#vcs_branch() ],
+                    \'warn' : [ promptline#slices#last_exit_code() ],
+                    \'options': {
+                        \'left_only_sections' : [ 'c', 'b', 'a', 'y', 'warn' ]}
+                    \}
+        " 可以传入字典
+        " let g:promptline_theme = 'airline'
+        let g:promptline_theme = {
+                    \'c'    : [ 253, 24 ],
+                    \'b'    : [ 252, 31 ],
+                    \'a'    : [ 8, 249 ],
+                    \'y'    : [ 252, 31 ],
+                    \'warn' : [ 232, 166 ]
+                    \}
+        let g:promptline_powerline_symbols = 1
+    endfunction
+    call SetPromptline()
 
 " Easy-Align
     function! SetEasyAlign()
@@ -899,4 +1014,3 @@
     " " let g:vimim_punctuation = 2
     " let g:vimim_shuangpin = 1
     " let g:vimim_toggle = 'sogou,pinyin'
-

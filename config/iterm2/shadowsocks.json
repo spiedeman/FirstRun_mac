@@ -1,0 +1,11 @@
+{
+    "server":"144.202.41.163",
+    "server_port":8989,
+    "local_address": "127.0.0.1",
+    "local_port":1080,
+    "password":"sherlocK3#",
+    "timeout":300,
+    "method":"aes-256-cfb",
+    "fast_open": true,
+    "workers": 1
+}
