@@ -18,22 +18,28 @@ function add_path {
 }
 
 function set_bash {
+    # If not running interactively, don't do anything
+    case $- in
+        *i*) ;;
+          *) return;;
+    esac
+    # 下面两项用于设置字符集。
+    # 若不设置会导致如下问题
+    # 1、在alacritty中不显示中文
+    # 2、启动tmux时不带选项-u则无法识别powerline字符集
+    export LC_ALL=zh_CN.UTF-8
+    export LANG=zh_CN.UTF-8
     export EDITOR=vim
     HISTCONTROL=ignoreboth
     HISTSIZE=1000
     HISTFILESIZE=2000
-    eval "$(gdircolors -b ~/.dir_colors)"
+    eval "$(gdircolors -b ~/.dircolors)"
+    # export LSCOLORS=exfxhxhxgxhxhxgxgxbxbx
 
     # ALIAS
     function set_alias {
-        alias office='ssh -X xuwutao@124.16.143.99'
-        alias itp='ssh -X xuwutao@159.226.161.107 -i ~/.ssh/xuwutao_id_rsa'
-        alias vultr='ssh vultrxu@207.246.99.248'
-        alias linode='ssh linodexu@172.105.209.32'
-        alias sccas='ssh guozk1@159.226.184.211'
         alias ..='cd ..'
         alias ...='cd ../..'
-        alias vim='vim --servername vim'
         alias ls='gls --color=auto'
         alias ll='ls -hl'
         alias la='ls -A'
@@ -41,7 +47,7 @@ function set_bash {
         alias lla='ls -hAl'
         alias grep='grep --color=auto'
         alias tree='tree -N'
-        alias jupyter='nohup jupyter-notebook > ~/Documents/python/jupyter/jupyter.log 2>&1 &'
+        alias jupyter='nohup jupyter-notebook > ~/Documents/Code/python/jupyter/jupyter.log 2>&1 &'
     }
     set_alias
 
@@ -55,9 +61,11 @@ function set_bash {
     # PATH
     function set_path {
         # PATH=$HOME/Program/bin:$PATH
-        add_path $HOME/Program/bin
-        add_path /Users/xuwutao/Library/Python/2.7/bin
+        add_path /usr/local/sbin
+        add_path ~/Program/bin
+        # add_path /Users/xuwutao/Library/Python/2.7/bin
         add_path /Users/xuwutao/Library/Python/3.7/bin
+        add_path /usr/local/opt/python/libexec/bin
 
         if [ -f /usr/local/share/bash-completion/bash_completion ]; then
             . /usr/local/share/bash-completion/bash_completion
@@ -67,28 +75,6 @@ function set_bash {
 }
 set_bash
 
-function set_plugins {
-    function set_promptline {
-        [ -f ~/.shell_prompt.sh ] && source ~/.shell_prompt.sh
-    }
-    set_promptline
-
-    # FOR PYTHON
-    function set_virtualenvwrapper {
-        export WORKON_HOME=$HOME/.virtualenvs
-        export VIRTUALENVWRAPPER_SCRIPT=$HOME/Library/Python/2.7/bin/virtualenvwrapper.sh
-        source $HOME/Library/Python/2.7/bin/virtualenvwrapper_lazy.sh
-    }
-    set_virtualenvwrapper
-
-    # FOR AUTOJUMP
-    [[ -s /usr/local/Cellar/autojump/22.5.1/etc/autojump.sh ]] && . /usr/local/Cellar/autojump/22.5.1/etc/autojump.sh
-
-    # FOR FZF
-    [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-}
-set_plugins
 
 function set_network {
     # FOR SHADOWSOCKS
@@ -112,36 +98,108 @@ function set_network {
     function set_ssh {
         export office=xuwutao@124.16.143.99:/home/xuwutao
         export xuwutao="-i ~/.ssh/xuwutao_id_rsa xuwutao@159.226.161.107:/public/home/xuwutao"
-        export vultr=vultrxu@207.246.99.248:/home/vultrxu
+        export vultr=vultrxu@45.77.20.197:/home/vultrxu
         export linode=linodexu@172.105.209.32:/home/linodexu
         export sccas=guozk1@159.226.184.211:/home/guozk1
+        export alpha=alpharacks@107.161.81.53:/home/alpharacks
+        export cloudcone=cloudcone@173.82.106.159:/home/cloudcone
     }
     set_ssh
 }
 set_network
 
+function set_plugins {
+    function set_alacritty {
+        source ~/.bash_completions/alacritty-completions.bash
+        parent=$(ps -c -o 'command=' $(ps -o 'ppid=' $$))
+        if [[ $parent =~ "alacritty" ]]; then
+            add_path /Applications/Alacritty.app/Contents/MacOS
+        fi
+    }
+    set_alacritty
+
+    function set_kitty() {
+        if command -v kitty > /dev/null; then
+            source <(kitty + complete setup bash)
+        fi
+    }
+    set_kitty
+
+    function set_promptline {
+        [ -f ~/.shell_prompt.sh ] && source ~/.shell_prompt.sh
+    }
+    set_promptline
+
+    # FOR JAVA
+    function set_java {
+        export JENV_ROOT=~/.jenv
+        if command -v jenv > /dev/null; then
+            eval "$(jenv init - --no-rehash)"
+        fi
+    }
+    set_java
+
+    # FOR RUBY
+    function set_ruby {
+        if command -v rbenv > /dev/null; then
+            eval "$(rbenv init - --no-rehash)"
+        fi
+    }
+    set_ruby
+
+    # FOR  PYTHON
+    function set_pyenv {
+        if command -v pyenv > /dev/null; then
+            eval "$(pyenv init - --no-rehash)"
+        fi
+        # eval "$(pyenv virtualenv-init -)"
+        export PYTHON_CONFIGURE_OPTS="--enable-framework"
+        export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+        # papis
+        source ~/.bash_completions/papis
+    }
+    set_pyenv
+
+    function set_virtualenvwrapper {
+        export WORKON_HOME=$HOME/.virtualenvs
+        export VIRTUALENVWRAPPER_SCRIPT=$HOME/Library/Python/3.7/bin/virtualenvwrapper.sh
+        source ~/Library/Python/3.7/bin/virtualenvwrapper_lazy.sh
+    }
+    # set_virtualenvwrapper
+
+    # FOR AUTOJUMP
+    [[ -s /usr/local/Cellar/autojump/22.5.1/etc/autojump.sh ]] && . /usr/local/Cellar/autojump/22.5.1/etc/autojump.sh
+
+    # FOR FZF
+    [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+}
+set_plugins
+
 function set_cosmos {
     # FOR INTEL COMPILER
     # echo "set fortran compiler"
-    source $HOME/Program/intel/compilers_and_libraries/mac/bin/compilervars.sh -arch intel64 -platform mac
+    source ~/Program/intel/2018/compilers_and_libraries/mac/bin/compilervars.sh -arch intel64 -platform mac
     if [ "$HAS_SOURCED" = 0 ]; then
         # FOR OPENMPI
-        PATH=$HOME/Program/openmpi-2.1.3/bin:$PATH
+        # add_path $HOME/Program/openmpi-2.0.4/bin
+        # add_path $HOME/Program/openmpi-3.0.1/bin
         TMPDIR=/tmp
         # FOR HEALPIX
         PATH=$HOME/Program/Healpix_3.31/bin:$PATH
         # FOR COSMOMC
         PYTHONPATH=$HOME/Work/project/cmb_dipole/CosmoMC-June2016/python:$PYTHONPATH
         # FOR CIFITSIO
-        DYLD_LIBRARY_PATH=$HOME/Program/cfitsio3390/lib:${DYLD_LIBRARY_PATH}
+        # DYLD_LIBRARY_PATH=$HOME/Program/cfitsio3390/lib:${DYLD_LIBRARY_PATH}
+        DYLD_LIBRARY_PATH=/usr/local/Cellar/cfitsio/3.450/lib:${DYLD_LIBRARY_PATH}
     fi
 }
-# time set_cosmos
 set_cosmos
+# set_cosmos
 # exec fish
 
 HAS_SOURCED=1
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

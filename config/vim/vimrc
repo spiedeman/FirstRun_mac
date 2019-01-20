@@ -7,19 +7,25 @@
 "
 "===========================================================================
 
-
     " Vim-Plugin Manager
     " Specify a directory for plugins
     " - Avoid using standard Vim directory names like 'plugin'
+    if empty(glob('~/.vim/autoload/plug.vim'))
+        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+            \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
     call plug#begin('~/.vim/vim_plugin')
 
     " Make sure using single quotes
     " Shorthand notation for full URL.
     Plug 'altercation/vim-colors-solarized'
-    Plug 'flazz/vim-colorschemes'            "主题合集
+    Plug 'iCyMind/NeoSolarized'
+    " Plug 'flazz/vim-colorschemes'            "主题合集
     Plug 'vim-airline/vim-airline'                             " 状态栏
     Plug 'vim-airline/vim-airline-themes'                      " airline 主题
-    Plug 'edkolev/promptline.vim'                              " bash 提示符
+    " Plug 'edkolev/promptline.vim'                              " bash 提示符
+    " Plug 'edkolev/tmuxline.vim'                                " tmux 提示栏
     Plug 'yianwillis/vimcdoc'                                  " 中文帮助文档
     Plug 'scrooloose/nerdtree',{'on':'NERDTreeToggle'}         " 文件树浏览
     Plug 'majutsushi/tagbar',{'on':['Tagbar', 'TagbarToggle', 'TagbarOpen']} " 文件结构
@@ -41,15 +47,17 @@
     Plug 'skywind3000/asyncrun.vim',{'on':'AsyncRun'}          " 异步后台编译运行
 
     " Plug 'lervag/vimtex',{'for': 'tex'}                        " Latex 插件
-    Plug 'lervag/vimtex'                        " Latex 插件
+    Plug 'lervag/vimtex'                                       " Latex 插件
     Plug 'junegunn/vim-easy-align'                             " 对齐排版工具
     Plug 'Raimondi/delimitMate'                                " 括号配对
     Plug 'plasticboy/vim-markdown',{'for': 'markdown'}         " 高亮 Markdown, 依赖 tabular
-    " Plug 'suan/vim-instant-markdown'
-    " Plug 'shime/vim-livedown'
     Plug 'iamcco/mathjax-support-for-mkdp',{'for': 'markdown'} " 预览数学公式
     Plug 'iamcco/markdown-preview.vim',{'for':'markdown'}      " 实时预览 Markdown
     Plug 'jszakmeister/markdown2ctags',{'for':'markdown'}
+
+    Plug 'tomedunn/vim.modfortran'
+    Plug 'kchmck/vim-coffee-script'
+    Plug 'spiedeman/keylayout-vim-osx'
 
     " On-damand loading of plugins
     function! BuildYCM(info)
@@ -85,6 +93,7 @@
         set termencoding=utf-8
         set formatoptions+=nM
         set fileencodings=utf-8,gbk
+        scriptencoding utf-8
         
         " if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
         "     " set ambiwidth=double
@@ -95,6 +104,9 @@
     endif 
     " Doc directory 
     let helptags=$HOME.'/.vim/doc'
+    if has('mouse_sgr')
+        set ttymouse=sgr
+    endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                              Vim GUI                               "
@@ -102,7 +114,7 @@
 " Basic Setting
     function! BasicSetting()
         set number             "显示行号
-        set nocompatible       "与vi不兼容
+        " set nocompatible       "与vi不兼容
         set cursorline         "突出显示当前行
         set cursorcolumn       "突出显示当前列
         set ruler              "打开状态栏标尺
@@ -114,7 +126,7 @@
         set expandtab          "修改tab为4个空格
         " set autoindent
         set regexpengine=1
-        set relativenumber
+        " set relativenumber
         set lazyredraw
         set ttyfast
         set synmaxcol=200
@@ -170,36 +182,31 @@
     call SetFold()    
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color Setting
+    " let fortran_free_source = 1
     function! SetColor()
-        syntax on              "自动语法高亮
         set t_Co=256
-        
+        syntax on              "自动语法高亮
         function! MyColorScheme(name, bg)
             execute 'set background='.a:bg
-            execute 'colorscheme '.a:name
-            if a:name ==? 'solarized'
-                let g:solarized_underline = 0
-                let g:solarized_contrast = 'low'
-                let g:solarized_contrast = 'normal'
-                let g:solarized_contrast = 'high'
-                if &background ==? 'dark'
-                    hi CursorLine   cterm=NONE ctermbg=black     ctermfg=none
-                    hi CursorColumn cterm=NONE ctermbg=black     ctermfg=none
-                    hi Pmenu        cterm=NONE ctermbg=darkblue  ctermfg=234
-                    hi PmenuSel     cterm=BOLD ctermbg=darkgreen ctermfg=234
-                    hi StatusLine   cterm=reverse
-                    hi Folded       cterm=BOLD ctermbg=black     ctermfg=246
-                    hi SignColumn   cterm=NONE ctermbg=black     ctermfg=none   gui=NONE guifg=NONE guibg=#073642
-                    hi Error        cterm=NONE ctermbg=black     ctermfg=red    gui=bold guifg=red 
-                    hi Todo         cterm=NONE ctermbg=black     ctermfg=yellow
-                else                      "light
-                    hi CursorLine   cterm=NONE ctermbg=lightgrey ctermfg=none
-                    hi CursorColumn cterm=NONE ctermbg=lightgrey ctermfg=none
-                    hi Pmenu        cterm=BOLD ctermbg=blue      ctermfg=white
-                    hi PmenuSel     cterm=BOLD ctermbg=darkcyan  ctermfg=yellow
-                    hi StatusLine   cterm=inverse
-                    hi StatusLineNC cterm=none ctermbg=grey
-                    hi SignColumn   cterm=NONE ctermbg=lightgrey ctermfg=none gui=NONE guifg=NONE  guibg=#eee8d5
+            " execute 'colorscheme '.a:name
+            " hi Normal ctermbg=NONE guibg=NONE
+            if a:name ==? 'NeoSolarized'
+                let g:neosolarized_vertSplitBgTrans=0
+                let g:neosolarized_termtrans=1
+                execute 'colorscheme '.a:name
+                hi Terminal ctermbg=NONE guibg=#073642
+                hi Pmenu        cterm=NONE ctermbg=33  ctermfg=234 gui=NONE guibg=#0080fe  guifg=black
+                hi PmenuSel     cterm=BOLD ctermbg=34 ctermfg=234 gui=bold guibg=#3bb143  guifg=black
+                if a:name ==? 'dark'
+                    " hi StatusLine   cterm=reverse
+                    " hi Folded       cterm=BOLD ctermbg=black     ctermfg=246
+                    " hi SignColumn   cterm=NONE ctermbg=black     ctermfg=none   gui=NONE guifg=NONE guibg=#073642
+                    " hi Todo         cterm=NONE ctermbg=black     ctermfg=yellow
+                else
+                    " hi StatusLine   cterm=reverse
+                    " hi Folded       cterm=BOLD ctermbg=lightgrey     ctermfg=246
+                    " hi StatusLineNC cterm=none ctermbg=grey
+                    " hi SignColumn   cterm=NONE ctermbg=lightgrey ctermfg=none gui=NONE guifg=NONE  guibg=#eee8d5
                 endif
             elseif a:name ==? 'dracula'
                 if &background ==? 'dark'
@@ -213,22 +220,46 @@
         endfunction
 
         if has('gui_running')
-            " set background=dark "实际上light才会给出正确的solarized配色
-            call MyColorScheme('solarized', 'dark')
-            " call MyColorScheme('solarized', 'light')
-            " colorscheme violet
             set guicursor=a:block-blinkon0
-            set guifont=Hack\ Regular\ Nerd\ Font\ Complete:h14
-            set guifontwide=Inconsolata-g\ for\ Powerline:h14
+            set guifont=Meslo\ LG\ S\ for\ Powerline:h14
+            set guifont=Hack:h14
             set guioptions=t
+            set background=light
+            set transparency=5
+            call MyColorScheme('NeoSolarized', 'light')
+            call MyColorScheme('NeoSolarized', 'dark')
         elseif $FROM_SSH ==? 'TRUE'
             call MyColorScheme('Monokai', 'light')
         else 
-            " call MyColorScheme('dracula', 'light')
-            " call MyColorScheme('Monokai', 'dark')
-            " call MyColorScheme('solarized', 'light')
-            call MyColorScheme('solarized', 'dark')
+            if has('termguicolors')
+                " fix bug for vim
+                set t_8f=[38;2;%lu;%lu;%lum
+                set t_8b=[48;2;%lu;%lu;%lum
+                " 目前在kitty和alacrity中设置truecolor会出现一些问题
+                " kitty:
+                "   在vim中打开的终端不透明，且颜色出错
+                " alacrity:
+                "   在vim中打开的终端不透明
+                " enable true color
+                set termguicolors
+                " let g:term_colors=['#073642', '#dc322f', '#859900', '#b58900', '#268bd2', '#d33682', '#2aa198', '#eee8d5', '#002b36', '#cb4b16', '#586e75', '#657b83', '#839496', '#6c71c4', '#93a1a1', '#fdf6e3']
+                " call term_setansicolors(, term_colors)
+            endif
+            call MyColorScheme('dracula', 'light')
+            call MyColorScheme('Monokai', 'dark')
+            call MyColorScheme('NeoSolarized', 'dark')
         endif
+
+        function! BackgroundToggle()
+            if &background ==? 'light'
+                silent !solarized dark
+                call MyColorScheme(g:colors_name, 'dark')
+            else
+                silent !solarized light
+                call MyColorScheme(g:colors_name, 'light')
+            endif
+        endfunction
+        nnoremap <F2> :call BackgroundToggle()<CR>
     endfunction
     call SetColor()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -310,27 +341,19 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Fortran
     function! SetFortran()
-        let s:extfname=expand('%:e')
-        if s:extfname==?'f90'
-            let fortran_free_source=1
-            unlet! fortran_fixed_source
-        else
-            let fortran_fixed_source=1
-            unlet! fortran_free_source
-        endif
         let fortran_more_precise=1
         let fortran_do_enddo=1
         let fortran_have_tabs=1
         let fortran_fold=1
         let fortran_fold_conditionals=1
-        " let g:syntastic_fortran_compiler="ifort" "使语法检测正常,本该写在插件部分
-        " au BufNewFile,BufRead *.f90
-        " \let fortran_have_tabs=1
-        " \let fortran_fold=1
-        " \set foldmethod=syntax
-        " \set foldcolumn=99
-        " \let fortran_free_source=1
-        " \unlet! fortran_fixed_source
+        let s:extfname=expand('%:e')
+        function! FreeFormat()
+            set syntax=fortran
+            let b:fortran_fixed_source=0
+            set syntax=text
+            set syntax=fortran
+        endfunction
+        au BufNewFile,BufReadPost *.f90,*.F90 call FreeFormat()
     endfunction
     call SetFortran()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -581,7 +604,11 @@
 
 " Vimtex
     function! SetVimtex()
+        if empty(v:servername) && exists('*remote_startserver')
+            call remote_startserver('TEX')
+        endif
         let g:vimtex_enabled = 1
+        let g:vimtex_format_enabled = 1
         function! VimtexTrigger()
             if g:vimtex_enabled == 0
                 let g:vimtex_enabled = 1
@@ -591,12 +618,25 @@
                 echom 'vimtex turns off'
             endif
         endfunction
-        nnoremap <leader>v :call VimtexTrigger()<CR>
+        " nnoremap <leader>v :call VimtexTrigger()<CR>
         " automatically jump to the first error 
         " but not work well with continuous compilation
         let g:vimtex_quickfix_autojump = 0
         " specify PDF viewer
         let g:vimtex_view_method = 'skim'
+
+        " function! CloseViewers()
+        "     if executable('xdotool') && exists('b:vimtex')
+        "         \ && exists('b:vimtex.viewer') && b:vimtex.viewer.xwin_id > 0
+        "     call system('xdotool windowclose '. b:vimtex.viewer.xwin_id)
+        "     endif
+        " endfunction
+
+        " augroup vimtex_event_2
+        "     au!
+        "     au User VimtexEventQuit call CloseViewers()
+        " augroup END
+
         " make YCM work
         if !exists('g:ycm_semantic_triggers')
             let g:ycm_semantic_triggers = {}
@@ -614,8 +654,6 @@
             \ 'continuous' : 1,
             \ 'executable' : 'latexmk',
             \ 'options' : [
-            \   '-pdf',
-            \   '-xelatex',
             \   '-verbose',
             \   '-file-line-error',
             \   '-synctex=1',
@@ -636,22 +674,21 @@
 
 " Vim-markdown
     function! SetVimmarkdown()
+        " YAML front matter
+        let g:vim_markdown_frontmatter = 1
         " fenced code block languages
         let g:vim_markdown_fenced_languages = ['python=py', 'viml=vim', 'bash=sh', 'c++=cpp']
         let g:vim_markdown_folding_disabled = 1
-        let g:vim_markdown_folding_style_pythonic = 1
         " set header folding level
         let g:vim_markdown_folding_level = 6
         let g:vim_markdown_toc_autofit = 1
         " adjust new list item indent
         let g:vim_markdown_new_list_item_indent = 2
         " disable math conceal with LaTex math syntax enabled
-        let g:tex_conceal = ''
+        " let g:tex_conceal = ""
         let g:vim_markdown_math = 1
         " syntax concealing
         let g:vim_markdown_conceal = 0
-        " YAML Front Matter
-        let g:vim_markdown_frontmatter = 1
     endfunction
     call SetVimmarkdown()
 
@@ -680,21 +717,6 @@
         inoremap <c-p> :call MarkdownPreviewTrigger()<CR>
     endfunction 
     call SetMarkdownPreview()
-
-" Vim-InstantMarkdown
-    function! SetInstantMarkdown()
-        let g:instant_markdown_autostart = 0
-        let g:instant_markdown_allow_unsafe_content = 1
-    endfunction
-    " call SetInstantMarkdown()
-
-" Vim-livedown
-    function! SetLivedown()
-        let g:livedown_autorun = 0
-        let g:livedown_open = 1
-        let g:livedown_browser = "safari"
-    endfunction
-    " call SetLivedown()
 
 " Easymotion
     function! SetEasymotion()
@@ -760,45 +782,16 @@
     endfunction
     call SetFzf() 
 
-" " Ctrlp
-    " let g:ctrlp_map = '<c-p>'
-    " let g:ctrlp_cmd = 'CtrlP'
-    " let g:ctrlp_working_path_mode = 'ra'
-    " " let g:Ctrl_match_height=15
-    " set wildignore+=*/tem/*,*.so,*.swp,*.zip
-    " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)'
-    " let g:ctrlp_custom_ignore = {
-    "     \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-    "     \ 'file': '\v\.(exe|so|dll)$',
-    "     \ 'link': 'some_bad_symbolic_links',
-    "     \ }
-    " let g:ctrl_user_commond = 'find %s -type f'   "MacOSX/Linux"
-    " " 操作命令
-    " " ctrl + j/k 上下选择
-    " " ctrl + x 在当前窗口水平分屏打开文件
-    " " ctrl + v 同上，垂直分屏
-    " " ctrl + t 在新的tab中打开
-
-" " Ctrlp-funky
-    " nnoremap <leader>fu :CtrlPFunky<CR>
-    " nnoremap <leader>fU :execute 'CtrlPFunky' . expand('<cword>')<CR>
-    " let g:ctrlp_funky_syntax_highlight=1
-    " let g:ctrlp_extensions=['funky']
-
-" " Syntastic
-    " set statusline+=%#warningmsg#
-    " set statusline+=%{SyntasticStatuslineFlag()}
-    " set statusline+=%*
-    "
-    " let g:syntastic_python_checkers = ['pep8']
-    " let g:syntastic_always_populate_loc_list = 1
-    " let g:syntastic_auto_loc_list = 1
-    " let g:syntastic_check_on_open = 0
-    " let g:syntastic_check_on_wq = 0
-
 " ALE
     function! SetALE() 
         autocmd FileType * noremap <buffer> <Leader><Leader>c :ALELint<CR>
+        let g:ale_lint_on_enter = 1
+        let g:ale_lint_on_text_changed = 'never'
+        let g:ale_lint_on_save = 1
+        let g:ale_set_quickfix = 1
+        " if show the error column forever.
+        let g:ale_sign_column_always = 0
+        let g:ale_sign_error = '••'
         " 只有来自 g:ale_linters 和 b:ale_linters 中的 linters 会被启动
         let g:ale_linters_explicit = 1
         " bash 文件会运行 sh 的 linter
@@ -807,48 +800,56 @@
                                     \'vimwiki': 'markdown',
                                     \}
         let g:ale_linters_ignore = {'python': ['pylint'],
-                                   \'fortran': ['gcc'],
                                    \}
-        let g:ale_linters = {'python': ['flake8','pycodestyle'],
+        let g:ale_linters = {'python': ['pyls'],
                             \'sh': ['shellcheck'],
                             \'vim': ['vint'],
-                            \'fortran': ['gcc', 'language_server'],
-                            \'c':['clang']}
-        " 忽略 pylint 
-        let g:ale_python_pycodestyle_options='--ignore=E305 %s'
-        let g:ale_python_flake8_options='--ignore=E305 %s'
-        let g:ale_lint_on_enter = 1
-        let g:ale_lint_on_text_changed = 'never'
-        let g:ale_set_quickfix = 1
-        " if show the error column forever.
-        let g:ale_sign_column_always = 1
-        " let g:ale_sign_error = '••'
+                            \'fortran': ['gcc'],
+                            \'c':['clang'],
+                            \'tex':['lacheck', 'chktex'],
+                            \}
+        let g:ale_sh_shellcheck_exclusions = 'SC1090,SC2005,SC2046,SC2086,SC2155'
 
-        " open window for error and warning.
-        " let g:ale_open_list = 1
+        let g:ale_fortran_gcc_executable = 'gfortran'
+        let g:ale_fortran_gcc_options = '-Wall'
+        let g:ale_fortran_gcc_use_free_form = 1
+        "
+        let g:ale_fixers = {
+                    \   'c': [
+                    \       'clang-format',
+                    \   ],
+                    \   'python': [
+                    \       'yapf',
+                    \       'trim_whitespace',
+                    \       'remove_trailing_lines',
+                    \   ],
+                    \   'sh': [
+                    \       'shfmt',
+                    \       'trim_whitespace',
+                    \       'remove_trailing_lines',
+                    \   ],
+                    \}
         " customize format for error and warning messages.
         " let g:ale_echo_msg_error_str = 'E'
         " let g:ale_echo_msg_warning_str = 'W'
-        let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+        " let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
         nmap <silent> <C-k> <Plug>(ale_previous_wrap)
         nmap <silent> <C-j> <Plug>(ale_next_wrap)
+        nmap <silent> <F3> <Plug>(ale_fix)
     endfunction 
     call SetALE() 
 
 " Autoformat
     function! SetAutoformat()
-        autocmd FileType python,c,fortran noremap <buffer> <F10> :Autoformat<CR>
+        autocmd FileType c,fortran noremap <buffer> <F10> :Autoformat<CR>
         " nmap <buffer> <F8> :Autoformat<CR>
         " 插件会自动设置这两项，yapf 的优势在于代码风格的可定制性。
-        let g:formatter_python=['yapf']
-        let g:formatter_yapf_style='facebook'
-
         let g:autoformat_autoindent=0
         let g:autoformat_retab=0
         let g:autoformat_remove_trailing_spaces=0
         " let g:autoformat_verbosemode=1
         autocmd FileType vim,tex let b:autoformat_autoindent=0
-        au BufWrite * :Autoformat
+        " au BufWrite * :Autoformat
     endfunction
     call SetAutoformat()
 
@@ -877,7 +878,7 @@
             elseif &filetype ==? 'sh'
                 exec 'AsyncRun! time bash %'
             elseif &filetype ==? 'python'
-                exec 'AsyncRun! python %'
+                exec 'AsyncRun! -raw python %'
             elseif &filetype ==? 'tex'
                 exec 'VimtexCompile'
             elseif &filetype ==? 'ruby'
@@ -885,7 +886,7 @@
             endif
         endfunction 
         " bind <F9> to open quickfix window rapidly.
-        nmap <f9> :call asyncrun#quickfix_toggle(10)<cr>
+        nmap <F9> :call asyncrun#quickfix_toggle(10)<cr>
         " like Emacs, use <M-x> to type commands.
         set timeoutlen=500 ttimeoutlen=100
         exec "set <M-x>=\ex"
@@ -919,46 +920,18 @@
 " Airline
     function! SetAirline()
         " let g:airline_theme='powerlineish'
-        let g:airline_theme='papercolor'
+        " let g:airline_theme='papercolor'
+        let g:airline_theme='minimalist'
         let g:airline_powerline_fonts = 1
         let g:airline#extensions#tabline#enabled=1
         let g:airline#extensions#tabline#show_tabs = 1
         let g:airline_extensions#tabline#show_buffers = 1
         " let g:airline#extensions#tabline#alt_sep = 1
         let g:airline#extensions#tabline#buffer_nr_show = 1
+        " integration with ALE
+        let g:airline#extensions#ale#enabled = 1
         " let g:airline_extensions = ['vimtex', 'tagbar']
 
-        " function! AirlineThemePatch(palette)
-        "     " [ guifg, guibg, ctermfg, ctermbg, opts ].
-        "     " See "help attr-list" for valid values for the "opt" value.
-        "     " http://vim.wikia.com/wiki/Xterm256_color_names_for_console.Vim
-        "     let a:palette.accents.running = [ '', '', '', '' ]
-        "     let a:palette.accents.success = [ '#00ff00', '', 'green', '', '' ]
-        "     let a:palette.accents.failure = [ '#ff0000', '', 'red', '', '' ]
-        " endfunction
-        " let g:airline_theme_patch_func = 'AirlineThemePatch'
-        " 根据状态 g:asyncrun_status 改变相应区域的颜色
-        " 'running': default, 'success': green, 'failure': red
-        " let g:async_status_old = ''
-        " function! Get_asyncrun_running()
-        "     let async_status = g:asyncrun_status
-        "     if async_status != g:async_status_old
-        "         if async_status == 'running'
-        "             call airline#parts#define_accent('asyncrun_status', 'running')
-        "         elseif async_status == 'success'
-        "             call airline#parts#define_accent('asyncrun_status', 'success')
-        "         elseif async_status == 'failure'
-        "             call airline#parts#define_accent('asyncrun_status', 'failure')
-        "         endif
-        "
-        "         let g:airline_section_x = airline#section#create(['asyncrun_status'])
-        "         AirlineRefresh
-        "         let g:async_status_old = async_status
-        "     endif
-        "     return async_status
-        " endfunction
-        " call airline#parts#define_function('asyncrun_status', 'Get_asyncrun_running')
-        " let g:airline_section_x = airline#section#create(['asyncrun_status'])
     endfunction
     call SetAirline()
 
@@ -994,7 +967,21 @@
                     \}
         let g:promptline_powerline_symbols = 1
     endfunction
-    call SetPromptline()
+    " call SetPromptline()
+
+" Tmuxline
+    function! SetTmuxline()
+        " let g:tmuxline_theme = 'iceberg'
+        " let g:tmuxline_preset = {
+                    \'a'    : '#S',
+                    \'b'    : '#W',
+                    \'win'  : ['#I', '#W'],
+                    \'cwin' : ['#I', '#W', '#F'],
+                    \'y'    : ['#(buffer_size)', '%R'],
+                    \'z'    : '#h',
+                    \}
+    endfunction
+    " call SetTmuxline()
 
 " Easy-Align
     function! SetEasyAlign()
@@ -1006,11 +993,3 @@
 " IndentLine
     " let g:indentLine_setConceal = 0
     nmap <leader>i :IndentLinesToggle<cr>
-
-" " VimIM
-    " let g:vimim_cloud = 'sogou,baidu,qq'
-    " let g:vimim_map = 'tav_as_gi'
-    " " let g:vimim_mode = 'dynamic'
-    " " let g:vimim_punctuation = 2
-    " let g:vimim_shuangpin = 1
-    " let g:vimim_toggle = 'sogou,pinyin'
